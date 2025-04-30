@@ -1,0 +1,183 @@
+import { z } from "zod"
+import { rabbitHttpRequest } from "../client.js"
+
+export type MCPTextContent = { [x: string]: unknown; type: "text"; text: string }
+export type MCPToolResult = {
+  content: MCPTextContent[]
+  _meta?: { [x: string]: unknown }
+  isError?: boolean
+}
+
+const listQueues = {
+  name: "list-queues",
+  description: "List all queues across all vhosts",
+  params: {},
+  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+    const queues = await rabbitHttpRequest("/queues")
+    return { content: [{ type: "text", text: JSON.stringify(queues, null, 2) } as MCPTextContent] }
+  },
+}
+
+const listQueuesVhost = {
+  name: "list-queues-vhost",
+  description: "List queues for a specific vhost",
+  params: { vhost: z.string() },
+  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost } = args
+    const queues = await rabbitHttpRequest(`/queues/${encodeURIComponent(vhost)}`)
+    return { content: [{ type: "text", text: JSON.stringify(queues, null, 2) } as MCPTextContent] }
+  },
+}
+
+const getQueue = {
+  name: "get-queue",
+  description: "Get details for a specific queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const queue = await rabbitHttpRequest(`/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
+    return { content: [{ type: "text", text: JSON.stringify(queue, null, 2) } as MCPTextContent] }
+  },
+}
+
+const putQueue = {
+  name: "put-queue",
+  description: "Create or update a queue",
+  params: {
+    vhost: z.string(),
+    name: z.string(),
+    durable: z.boolean().optional().default(true),
+    auto_delete: z.boolean().optional().default(false),
+    arguments: z.record(z.any()).optional(),
+  },
+  handler: async (args: { vhost: string; name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name, ...body } = args
+    const result = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
+      "PUT",
+      undefined,
+      body
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  },
+}
+
+const deleteQueue = {
+  name: "delete-queue",
+  description: "Delete a queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const result = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
+      "DELETE"
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  },
+}
+
+const purgeQueue = {
+  name: "purge-queue",
+  description: "Purge a queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const result = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/contents`,
+      "DELETE"
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  },
+}
+
+const getQueueMessages = {
+  name: "get-queue-messages",
+  description: "Get messages from a queue",
+  params: {
+    vhost: z.string(),
+    name: z.string(),
+    count: z.number().default(1),
+    ackmode: z.enum(["get", "reject_requeue_true"]).default("get"),
+    encoding: z.enum(["auto", "base64"]).default("auto"),
+    truncate: z.string().optional(),
+    requeue: z.boolean().optional().default(false),
+  },
+  handler: async (args: { vhost: string; name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name, ...body } = args
+    const messages = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/get`,
+      "POST",
+      undefined,
+      body
+    )
+    return { content: [{ type: "text", text: JSON.stringify(messages, null, 2) } as MCPTextContent] }
+  },
+}
+
+const getQueueBindings = {
+  name: "get-queue-bindings",
+  description: "List queue bindings",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const bindings = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/bindings`
+    )
+    return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
+  },
+}
+
+const getQueueUnacked = {
+  name: "get-queue-unacked",
+  description: "List unacked messages for a queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const unacked = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/unacked`
+    )
+    return { content: [{ type: "text", text: JSON.stringify(unacked, null, 2) } as MCPTextContent] }
+  },
+}
+
+const pauseQueue = {
+  name: "pause-queue",
+  description: "Pause a queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const result = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/pause`,
+      "PUT"
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  },
+}
+
+const resumeQueue = {
+  name: "resume-queue",
+  description: "Resume a queue",
+  params: { vhost: z.string(), name: z.string() },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const result = await rabbitHttpRequest(
+      `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/resume`,
+      "PUT"
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  },
+}
+
+export const QUEUE_TOOLS = [
+  listQueues,
+  listQueuesVhost,
+  getQueue,
+  putQueue,
+  deleteQueue,
+  purgeQueue,
+  getQueueMessages,
+  getQueueBindings,
+  getQueueUnacked,
+  pauseQueue,
+  resumeQueue
+]
