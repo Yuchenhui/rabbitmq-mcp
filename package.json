@@ -17,9 +17,13 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "rabbitmq-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
