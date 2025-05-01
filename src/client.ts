@@ -3,7 +3,7 @@ import { URL } from "url"
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE"
 
 interface RabbitMQApiConfig {
-  protocol?: "https"
+  protocol?: string
   hostname: string
   port: number
   username: string
@@ -12,12 +12,12 @@ interface RabbitMQApiConfig {
 }
 
 const config: RabbitMQApiConfig = {
-  protocol: "https",
-  hostname: process.env.RABBITMQ_HOST || "localhost",
-  port: Number(process.env.RABBITMQ_MANAGEMENT_PORT) || 443,
-  username: process.env.RABBITMQ_USERNAME || "guest",
-  password: process.env.RABBITMQ_PASSWORD || "guest",
-  basePath: "/api",
+  protocol: process.env.RABBITMQ_PROTOCOL || "https",
+  hostname: process.env.RABBITMQ_HOST,
+  port: Number(process.env.RABBITMQ_MANAGEMENT_PORT),
+  username: process.env.RABBITMQ_USERNAME,
+  password: process.env.RABBITMQ_PASSWORD,
+  basePath: process.env.RABBITMQ_BASE_PATH || "/api",
 }
 
 function buildRabbitUrl(
@@ -26,7 +26,7 @@ function buildRabbitUrl(
   queryParams?: Record<string, string>
 ): string {
   const url = new URL(
-    `https://${config.hostname}:${config.port}${config.basePath || "/api"}${endpoint}`
+    `${config.protocol}://${config.hostname}:${config.port}${config.basePath}${endpoint}`
   )
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {

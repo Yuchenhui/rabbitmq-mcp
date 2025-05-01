@@ -1,16 +1,6 @@
 import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
-
-export type MCPTextContent = {
-  [x: string]: unknown
-  type: "text"
-  text: string
-}
-export type MCPToolResult = {
-  content: MCPTextContent[]
-  _meta?: { [x: string]: unknown }
-  isError?: boolean
-}
+import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
 const listVhosts = {
   name: "list-vhosts",
@@ -234,6 +224,104 @@ const startVhostOnNode = {
   }
 }
 
+const listVhostLimits = {
+  name: "list-vhost-limits",
+  description: "List all vhost limits in the RabbitMQ cluster.",
+  params: {},
+  inputSchema: {
+    type: "object",
+    properties: {},
+    required: []
+  },
+  annotations: {
+    title: "List Vhost Limits",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
+  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+    const limits = await rabbitHttpRequest("/vhost-limits")
+    return { content: [{ type: "text", text: JSON.stringify(limits, null, 2) } as MCPTextContent] }
+  }
+}
+
+const listVhostLimitsVhost = {
+  name: "list-vhost-limits-vhost",
+  description: "List all vhost limits for a specific vhost.",
+  params: { vhost: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: { vhost: { type: "string" } },
+    required: ["vhost"]
+  },
+  annotations: {
+    title: "List Vhost Limits (Vhost)",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
+  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost } = args
+    const limits = await rabbitHttpRequest(`/vhost-limits/${encodeURIComponent(vhost)}`)
+    return { content: [{ type: "text", text: JSON.stringify(limits, null, 2) } as MCPTextContent] }
+  }
+}
+
+const putVhostLimit = {
+  name: "put-vhost-limit",
+  description: "Set a vhost limit for a vhost.",
+  params: { vhost: z.string(), name: z.string(), value: z.any() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" },
+      value: {}
+    },
+    required: ["vhost", "name", "value"]
+  },
+  annotations: {
+    title: "Set Vhost Limit",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
+  handler: async (args: { vhost: string; name: string; value: any }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name, value } = args
+    const result = await rabbitHttpRequest(
+      `/vhost-limits/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
+      "PUT",
+      undefined,
+      { value }
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  }
+}
+
+const deleteVhostLimit = {
+  name: "delete-vhost-limit",
+  description: "Delete a vhost limit for a vhost.",
+  params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Delete Vhost Limit",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
+  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
+    const { vhost, name } = args
+    const result = await rabbitHttpRequest(
+      `/vhost-limits/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
+      "DELETE"
+    )
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
+  }
+}
+
 export const VHOST_TOOLS = [
   listVhosts,
   getVhost,
@@ -243,5 +331,9 @@ export const VHOST_TOOLS = [
   getVhostTopicPermissions,
   protectVhost,
   unprotectVhost,
-  startVhostOnNode
+  startVhostOnNode,
+  listVhostLimits,
+  listVhostLimitsVhost,
+  putVhostLimit,
+  deleteVhostLimit
 ]

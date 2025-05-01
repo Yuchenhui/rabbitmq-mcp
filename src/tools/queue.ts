@@ -1,22 +1,12 @@
 import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
-
-export type MCPTextContent = {
-  [x: string]: unknown
-  type: "text"
-  text: string
-}
-export type MCPToolResult = {
-  content: MCPTextContent[]
-  _meta?: { [x: string]: unknown }
-  isError?: boolean
-}
+import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
 const listQueues = {
   name: "list-queues",
   description: "List all queues across all known vhosts",
   params: {},
-  inputSchema: {
+  in: {
     type: "object",
     properties: {},
     required: []
