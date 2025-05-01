@@ -40,13 +40,15 @@ export async function rabbitHttpRequest(
   endpoint: string,
   method: HttpMethod = "GET",
   queryParams?: Record<string, string>,
-  body?: any
+  body?: any,
+  extraHeaders?: Record<string, string>
 ): Promise<any> {
   const urlStr = buildRabbitUrl(config, endpoint, queryParams)
   const auth = Buffer.from(`${config.username}:${config.password}`).toString("base64")
   const headers: Record<string, string> = {
     "Authorization": `Basic ${auth}`,
     "Accept": "application/json",
+    ...extraHeaders
   }
   if (body) {
     headers["Content-Type"] = "application/json"

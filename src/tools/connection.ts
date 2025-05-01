@@ -43,38 +43,6 @@ const getConnection = {
   }
 }
 
-// Helper for DELETE with X-Reason header
-async function deleteWithReason(endpoint: string, reason?: string): Promise<any> {
-  const { hostname, port, basePath, username, password } = {
-    hostname: process.env.RABBITMQ_HOST || "localhost",
-    port: Number(process.env.RABBITMQ_MANAGEMENT_PORT) || 443,
-    basePath: "/api",
-    username: process.env.RABBITMQ_USERNAME || "guest",
-    password: process.env.RABBITMQ_PASSWORD || "guest"
-  }
-  const url = `https://${hostname}:${port}${basePath}${endpoint}`
-  const auth = Buffer.from(`${username}:${password}`).toString("base64")
-  const headers: Record<string, string> = {
-    "Authorization": `Basic ${auth}`,
-    "Accept": "application/json"
-  }
-  if (reason) headers["X-Reason"] = reason
-  const res = await fetch(url, {
-    method: "DELETE",
-    headers
-  })
-  const text = await res.text()
-  if (res.ok) {
-    try {
-      return JSON.parse(text)
-    } catch {
-      return text
-    }
-  } else {
-    throw new Error(`HTTP ${res.status}: ${text}`)
-  }
-}
-
 const deleteConnection = {
   name: "delete-connection",
   description: "Close a specific connection.",
@@ -91,7 +59,13 @@ const deleteConnection = {
   },
   handler: async (args: { name: string; reason?: string }, _extra: any): Promise<MCPToolResult> => {
     const { name, reason } = args
-    const result = await deleteWithReason(`/connections/${encodeURIComponent(name)}`, reason)
+    const result = await rabbitHttpRequest(
+      `/connections/${encodeURIComponent(name)}`,
+      "DELETE",
+      null,
+      null,
+      reason ? { "X-Reason": reason } : undefined
+    )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
 }
@@ -160,7 +134,13 @@ const deleteConnectionsUsername = {
   },
   handler: async (args: { username: string; reason?: string }, _extra: any): Promise<MCPToolResult> => {
     const { username, reason } = args
-    const result = await deleteWithReason(`/connections/username/${encodeURIComponent(username)}`, reason)
+    const result = await rabbitHttpRequest(
+      `/connections/username/${encodeURIComponent(username)}`,
+      "DELETE",
+      null,
+      null,
+      reason ? { "X-Reason": reason } : undefined
+    )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
 }

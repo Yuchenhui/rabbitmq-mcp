@@ -2,7 +2,6 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-// GET /api/health/checks/alarms
 const getHealthAlarms = {
   name: "get-health-alarms",
   description: "Get health check status for alarms.",
