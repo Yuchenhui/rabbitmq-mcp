@@ -1,7 +1,11 @@
 import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 
-export type MCPTextContent = { [x: string]: unknown; type: "text"; text: string }
+export type MCPTextContent = {
+  [x: string]: unknown
+  type: "text"
+  text: string
+}
 export type MCPToolResult = {
   content: MCPTextContent[]
   _meta?: { [x: string]: unknown }
@@ -10,34 +14,69 @@ export type MCPToolResult = {
 
 const listQueues = {
   name: "list-queues",
-  description: "List all queues across all vhosts",
+  description: "List all queues across all known vhosts",
   params: {},
+  inputSchema: {
+    type: "object",
+    properties: {},
+    required: []
+  },
+  annotations: {
+    title: "List Queues",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
     const queues = await rabbitHttpRequest("/queues")
     return { content: [{ type: "text", text: JSON.stringify(queues, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const listQueuesVhost = {
   name: "list-queues-vhost",
   description: "List queues for a specific vhost",
   params: { vhost: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" }
+    },
+    required: ["vhost"]
+  },
+  annotations: {
+    title: "List Queues (Vhost)",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost } = args
     const queues = await rabbitHttpRequest(`/queues/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(queues, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const getQueue = {
   name: "get-queue",
   description: "Get details for a specific queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Get Queue Details",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const queue = await rabbitHttpRequest(`/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(queue, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const putQueue = {
@@ -50,6 +89,22 @@ const putQueue = {
     auto_delete: z.boolean().optional().default(false),
     arguments: z.record(z.any()).optional(),
   },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" },
+      durable: { type: "boolean", default: true },
+      auto_delete: { type: "boolean", default: false },
+      arguments: { type: "object", additionalProperties: true }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Create or Update Queue",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name, ...body } = args
     const result = await rabbitHttpRequest(
@@ -59,13 +114,26 @@ const putQueue = {
       body
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const deleteQueue = {
   name: "delete-queue",
   description: "Delete a queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Delete Queue",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const result = await rabbitHttpRequest(
@@ -73,13 +141,26 @@ const deleteQueue = {
       "DELETE"
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const purgeQueue = {
   name: "purge-queue",
   description: "Purge a queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Purge Queue",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const result = await rabbitHttpRequest(
@@ -87,7 +168,7 @@ const purgeQueue = {
       "DELETE"
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const getQueueMessages = {
@@ -102,6 +183,24 @@ const getQueueMessages = {
     truncate: z.string().optional(),
     requeue: z.boolean().optional().default(false),
   },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" },
+      count: { type: "number", default: 1 },
+      ackmode: { type: "string", enum: ["get", "reject_requeue_true"], default: "get" },
+      encoding: { type: "string", enum: ["auto", "base64"], default: "auto" },
+      truncate: { type: "string" },
+      requeue: { type: "boolean", default: false }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Get Queue Messages",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name, ...body } = args
     const messages = await rabbitHttpRequest(
@@ -111,39 +210,78 @@ const getQueueMessages = {
       body
     )
     return { content: [{ type: "text", text: JSON.stringify(messages, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const getQueueBindings = {
   name: "get-queue-bindings",
   description: "List queue bindings",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "List Queue Bindings",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const bindings = await rabbitHttpRequest(
       `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/bindings`
     )
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const getQueueUnacked = {
   name: "get-queue-unacked",
   description: "List unacked messages for a queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "List Unacked Messages",
+    readOnlyHint: true,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const unacked = await rabbitHttpRequest(
       `/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/unacked`
     )
     return { content: [{ type: "text", text: JSON.stringify(unacked, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const pauseQueue = {
   name: "pause-queue",
   description: "Pause a queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Pause Queue",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const result = await rabbitHttpRequest(
@@ -151,13 +289,26 @@ const pauseQueue = {
       "PUT"
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 const resumeQueue = {
   name: "resume-queue",
   description: "Resume a queue",
   params: { vhost: z.string(), name: z.string() },
+  inputSchema: {
+    type: "object",
+    properties: {
+      vhost: { type: "string" },
+      name: { type: "string" }
+    },
+    required: ["vhost", "name"]
+  },
+  annotations: {
+    title: "Resume Queue",
+    readOnlyHint: false,
+    openWorldHint: true
+  },
   handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
     const { vhost, name } = args
     const result = await rabbitHttpRequest(
@@ -165,7 +316,7 @@ const resumeQueue = {
       "PUT"
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
-  },
+  }
 }
 
 export const QUEUE_TOOLS = [
