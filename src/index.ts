@@ -3,9 +3,13 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
 import { QUEUE_TOOLS } from "./tools/queue.js"
+import { VHOST_TOOLS } from "./tools/vhost.js"
 
 function rabbitmqTools(server: McpServer) {
   for (const tool of QUEUE_TOOLS) {
+    server.tool(tool.name, tool.description, tool.params, tool.handler)
+  }
+  for (const tool of VHOST_TOOLS) {
     server.tool(tool.name, tool.description, tool.params, tool.handler)
   }
 }
