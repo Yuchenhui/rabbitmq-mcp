@@ -1,28 +1,30 @@
-# rabbitmq-mcp
+# rabbitmq-mcp ![NPM Version](https://img.shields.io/npm/v/rabbitmq-mcp)
 
-A ModelContextProtocol (MCP) server for RabbitMQ, enabling MCP clients to interact with RabbitMQ queues and management APIs.
+A Model Context Protocol (MCP) server for RabbitMQ, enabling MCP clients to interact with RabbitMQ. This server aims to expose the full range of features available in the [official RabbitMQ HTTP API](https://www.rabbitmq.com/docs/http-api-reference) as tools.
+
+MCP is a [standardized protocol](https://modelcontextprotocol.io/) for managing context between large language models (LLMs) and external systems, such as RabbitMQ. It allows users to ask MCP-enabled AI agents, like Claude Desktop or Cursor, to interact with external systems using natural language.
+
+For example, you could ask:
+
+`Get me the message count in the inbound signup metrics queue, and if it's over 10,000, move half of them to the metrics overflow queue.`
+
+or
+
+`Purge the outbound email deadletter queue.`
+
+These are parseable and actionable requests that an MCP client can handle with this server. Fancy, huh?
+
+> [!IMPORTANT]
+> The management plugin **must** be [enabled](https://www.rabbitmq.com/docs/management#getting-started) in your RabbitMQ instance to use this server. While there are many options for interacting with RabbitMQ directly via AMQP, the protocol only provides a small subset of the capabilities available through the HTTP API.
 
 ## Installation
 
+If you prefer to install locally:
 ```sh
 npm install -g rabbitmq-mcp
 ```
 
-Or use directly with npx (no install required):
-
-```sh
-npx -y rabbitmq-mcp
-```
-
-## Usage
-
-You can run the server with:
-
-```sh
-rabbitmq-mcp
-```
-
-Or, if using npx:
+Or with npx:
 
 ```sh
 npx -y rabbitmq-mcp
@@ -30,24 +32,16 @@ npx -y rabbitmq-mcp
 
 ## Environment Variables
 
-Set the following environment variables to configure your RabbitMQ connection:
+The following environment variables are required to configure a connection to your RabbitMQ instance:
 
-- `RABBITMQ_HOST` – RabbitMQ host (e.g., `duck.lmq.cloudamqp.com`)
+- `RABBITMQ_HOST` – accessible host (e.g. `test.abc.cloudamqp.com`)
 - `RABBITMQ_USERNAME` – RabbitMQ username
 - `RABBITMQ_PASSWORD` – RabbitMQ password
-- `RABBITMQ_MANAGEMENT_PORT` – RabbitMQ management port (e.g., `443`)
-
-Example:
-
-```sh
-RABBITMQ_HOST=your-host \
-RABBITMQ_USERNAME=your-username \
-RABBITMQ_PASSWORD=your-password \
-RABBITMQ_MANAGEMENT_PORT=443 \
-rabbitmq-mcp
-```
+- `RABBITMQ_MANAGEMENT_PORT` – management port (e.g. `443` or `15672`)
 
 ## MCP Client Configuration Example
+
+As MPC is in rapid development, clients can be finicky to set up correctly. Here's an example best-case config for Claude and Cursor:
 
 ```json
 {
@@ -66,6 +60,18 @@ rabbitmq-mcp
   }
 }
 ```
+
+If you experience initialization errors, you may need to use absolute paths for the command and/or args:
+
+```json
+// ...
+  "command": "/local/path/to/node",
+  "args": ["/local/path/to/rabbitmq-mcp/dist/index.js"],
+// ...
+```
+
+> [!IMPORTANT]
+> Currently, this server only supports running locally with stdio. Remote functionality using SSE/streaming is planned for a future update.
 
 ## License
 
