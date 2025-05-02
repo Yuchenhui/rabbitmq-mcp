@@ -1,6 +1,6 @@
 {
   "name": "rabbitmq-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "RabbitMQ MCP Server",
   "type": "module",
   "author": "github.com/kmitchell",
