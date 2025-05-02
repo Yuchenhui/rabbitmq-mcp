@@ -4,18 +4,13 @@ A Model Context Protocol (MCP) server for RabbitMQ, enabling MCP clients to inte
 
 MCP is a [standardized protocol](https://modelcontextprotocol.io/) for managing context between large language models (LLMs) and external systems, such as RabbitMQ. It allows users to ask MCP-enabled AI agents, like Claude Desktop or Cursor, to interact with external systems using natural language.
 
-For example, you could ask:
+💬 Example Requests:
+> - Get me the message count in the inbound signup metrics queue, and if it's over 10,000, move half of them to the metrics overflow queue.
+> - Purge the outbound email deadletter queue.
+> - Check if there are any alarms triggered in the production vhost.
 
-`Get me the message count in the inbound signup metrics queue, and if it's over 10,000, move half of them to the metrics overflow queue.`
+These are parseable and actionable requests that an MCP client can handle with this server.
 
-or
-
-`Purge the outbound email deadletter queue.`
-
-These are parseable and actionable requests that an MCP client can handle with this server. Fancy, huh?
-
-> [!IMPORTANT]
-> The management plugin **must** be [enabled](https://www.rabbitmq.com/docs/management#getting-started) in your RabbitMQ instance to use this server. While there are many options for interacting with RabbitMQ directly via AMQP, the protocol only provides a small subset of the capabilities available through the HTTP API.
 
 ## Installation
 
@@ -77,14 +72,15 @@ As MPC is in rapid development, clients can be finicky to set up correctly. Here
 If you experience initialization errors, you may need to use absolute paths for the command and/or args:
 
 ```json
-// ...
   "command": "/local/path/to/node",
   "args": ["/local/path/to/rabbitmq-mcp/dist/index.js"],
-// ...
 ```
 
 > [!IMPORTANT]
 > Currently, this server only supports running locally with stdio. Remote functionality using SSE/streaming is planned for a future update.
+
+> [!IMPORTANT]
+> The management plugin **must** be [enabled](https://www.rabbitmq.com/docs/management#getting-started) in your RabbitMQ instance to use this server. While there are many options for interacting with RabbitMQ directly via AMQP, the protocol only provides a small subset of the capabilities available through the HTTP API.
 
 ## License
 
