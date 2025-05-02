@@ -31,13 +31,25 @@ npx -y rabbitmq-mcp
 ```
 
 ## Environment Variables
-
 The following environment variables are required to configure a connection to your RabbitMQ instance:
 
 - `RABBITMQ_HOST` – accessible host (e.g. `test.abc.cloudamqp.com`)
 - `RABBITMQ_USERNAME` – RabbitMQ username
 - `RABBITMQ_PASSWORD` – RabbitMQ password
 - `RABBITMQ_MANAGEMENT_PORT` – management port (e.g. `443` or `15672`)
+- `RABBITMQ_PROTOCOL` – `https` (default) or `http`. Use `https` for secure connections.
+
+### Optional TLS/HTTPS Options
+You can provide TLS/HTTPS credentials either as file paths or as environment variable strings:
+- `RABBITMQ_CA` – CA certificate (PEM string)
+- `RABBITMQ_CERT` – Client certificate (PEM string)
+- `RABBITMQ_KEY` – Client private key (PEM string)
+- `RABBITMQ_CA_PATH` – Path to CA certificate file
+- `RABBITMQ_CERT_PATH` – Path to client certificate file
+- `RABBITMQ_KEY_PATH` – Path to client private key file
+
+A cert verification flag exists for debugging, if needed:
+- `RABBITMQ_REJECT_UNAUTHORIZED` – Set to `false` to disable server certificate verification (defaults to `true`)
 
 ## MCP Client Configuration Example
 
@@ -54,7 +66,8 @@ As MPC is in rapid development, clients can be finicky to set up correctly. Here
         "RABBITMQ_HOST": "your-host",
         "RABBITMQ_USERNAME": "your-username",
         "RABBITMQ_PASSWORD": "your-password",
-        "RABBITMQ_MANAGEMENT_PORT": "443"
+        "RABBITMQ_MANAGEMENT_PORT": "15671",
+        "RABBITMQ_CA_PATH": "/path/to/rabbit-cert.crt"
       }
     }
   }
