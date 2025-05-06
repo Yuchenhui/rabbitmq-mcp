@@ -16,7 +16,7 @@ const listPermissions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const permissions = await rabbitHttpRequest("/permissions")
     return { content: [{ type: "text", text: JSON.stringify(permissions, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const getPermission = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user } = getPermission.params.parse(args)
     const permission = await rabbitHttpRequest(`/permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`)
     return { content: [{ type: "text", text: JSON.stringify(permission, null, 2) } as MCPTextContent] }
   }
@@ -63,13 +63,13 @@ const setPermission = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string; configure: string; write: string; read: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user, configure, write, read } = setPermission.params.parse(args)
     const result = await rabbitHttpRequest(
       `/permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`,
       "PUT",
       undefined,
-      body
+      { configure, write, read }
     )
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -89,8 +89,8 @@ const deletePermission = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user } = deletePermission.params.parse(args)
     const result = await rabbitHttpRequest(
       `/permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`,
       "DELETE"
@@ -113,7 +113,7 @@ const listTopicPermissions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const topicPermissions = await rabbitHttpRequest("/topic-permissions")
     return { content: [{ type: "text", text: JSON.stringify(topicPermissions, null, 2) } as MCPTextContent] }
   }
@@ -133,8 +133,8 @@ const getTopicPermission = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user } = getTopicPermission.params.parse(args)
     const topicPermission = await rabbitHttpRequest(`/topic-permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`)
     return { content: [{ type: "text", text: JSON.stringify(topicPermission, null, 2) } as MCPTextContent] }
   }
@@ -160,8 +160,8 @@ const setTopicPermission = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string; exchange: string; write: string; read: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user, exchange, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user, exchange, ...body } = setTopicPermission.params.parse(args)
     const result = await rabbitHttpRequest(
       `/topic-permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`,
       "PUT",
@@ -186,8 +186,8 @@ const deleteTopicPermission = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, user } = deleteTopicPermission.params.parse(args)
     const result = await rabbitHttpRequest(
       `/topic-permissions/${encodeURIComponent(vhost)}/${encodeURIComponent(user)}`,
       "DELETE"

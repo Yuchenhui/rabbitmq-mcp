@@ -16,7 +16,7 @@ const listBindings = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const bindings = await rabbitHttpRequest("/bindings")
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listBindingsVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listBindingsVhost.params.parse(args)
     const bindings = await rabbitHttpRequest(`/bindings/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }
@@ -61,8 +61,8 @@ const listBindingsExchangeQueue = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; exchange: string; queue: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, exchange, queue } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, exchange, queue } = listBindingsExchangeQueue.params.parse(args)
     const bindings = await rabbitHttpRequest(`/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(exchange)}/q/${encodeURIComponent(queue)}`)
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }
@@ -94,8 +94,8 @@ const createBindingExchangeQueue = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; exchange: string; queue: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, exchange, queue, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, exchange, queue, ...body } = createBindingExchangeQueue.params.parse(args)
     const result = await rabbitHttpRequest(
       `/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(exchange)}/q/${encodeURIComponent(queue)}`,
       "POST",
@@ -125,8 +125,8 @@ const deleteBindingExchangeQueue = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; exchange: string; queue: string; props: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, exchange, queue, props } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, exchange, queue, props } = deleteBindingExchangeQueue.params.parse(args)
     const result = await rabbitHttpRequest(
       `/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(exchange)}/q/${encodeURIComponent(queue)}/${encodeURIComponent(props)}`,
       "DELETE"
@@ -153,8 +153,8 @@ const listBindingsExchangeExchange = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; source: string; destination: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, source, destination } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, source, destination } = listBindingsExchangeExchange.params.parse(args)
     const bindings = await rabbitHttpRequest(`/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(source)}/e/${encodeURIComponent(destination)}`)
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }
@@ -186,8 +186,8 @@ const createBindingExchangeExchange = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; source: string; destination: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, source, destination, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, source, destination, ...body } = createBindingExchangeExchange.params.parse(args)
     const result = await rabbitHttpRequest(
       `/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(source)}/e/${encodeURIComponent(destination)}`,
       "POST",
@@ -217,8 +217,8 @@ const deleteBindingExchangeExchange = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; source: string; destination: string; props: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, source, destination, props } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, source, destination, props } = deleteBindingExchangeExchange.params.parse(args)
     const result = await rabbitHttpRequest(
       `/bindings/${encodeURIComponent(vhost)}/e/${encodeURIComponent(source)}/e/${encodeURIComponent(destination)}/${encodeURIComponent(props)}`,
       "DELETE"

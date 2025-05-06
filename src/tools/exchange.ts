@@ -16,7 +16,7 @@ const listExchanges = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const exchanges = await rabbitHttpRequest("/exchanges")
     return { content: [{ type: "text", text: JSON.stringify(exchanges, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listExchangesVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listExchangesVhost.params.parse(args)
     const exchanges = await rabbitHttpRequest(`/exchanges/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(exchanges, null, 2) } as MCPTextContent] }
   }
@@ -60,8 +60,8 @@ const getExchange = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getExchange.params.parse(args)
     const exchange = await rabbitHttpRequest(`/exchanges/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(exchange, null, 2) } as MCPTextContent] }
   }
@@ -97,8 +97,8 @@ const putExchange = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name, ...body } = putExchange.params.parse(args)
     const result = await rabbitHttpRequest(
       `/exchanges/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "PUT",
@@ -126,8 +126,8 @@ const deleteExchange = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = deleteExchange.params.parse(args)
     const result = await rabbitHttpRequest(
       `/exchanges/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "DELETE"
@@ -153,8 +153,8 @@ const getExchangeBindingsSource = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getExchangeBindingsSource.params.parse(args)
     const bindings = await rabbitHttpRequest(`/exchanges/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/bindings/source`)
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }
@@ -177,8 +177,8 @@ const getExchangeBindingsDestination = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getExchangeBindingsDestination.params.parse(args)
     const bindings = await rabbitHttpRequest(`/exchanges/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/bindings/destination`)
     return { content: [{ type: "text", text: JSON.stringify(bindings, null, 2) } as MCPTextContent] }
   }

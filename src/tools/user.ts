@@ -16,7 +16,7 @@ const listUsers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const users = await rabbitHttpRequest("/users")
     return { content: [{ type: "text", text: JSON.stringify(users, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const getUser = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = getUser.params.parse(args)
     const user = await rabbitHttpRequest(`/users/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(user, null, 2) } as MCPTextContent] }
   }
@@ -61,8 +61,8 @@ const putUser = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { name: string; [key: string]: any }, _extra: any): Promise<MCPToolResult> => {
-    const { name, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name, ...body } = putUser.params.parse(args)
     const result = await rabbitHttpRequest(
       `/users/${encodeURIComponent(name)}`,
       "PUT",
@@ -87,8 +87,8 @@ const deleteUser = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = deleteUser.params.parse(args)
     const result = await rabbitHttpRequest(
       `/users/${encodeURIComponent(name)}`,
       "DELETE"
@@ -111,8 +111,8 @@ const listUserPermissions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { user } = listUserPermissions.params.parse(args)
     const permissions = await rabbitHttpRequest(`/users/${encodeURIComponent(user)}/permissions`)
     return { content: [{ type: "text", text: JSON.stringify(permissions, null, 2) } as MCPTextContent] }
   }
@@ -132,8 +132,8 @@ const listUserTopicPermissions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { user } = listUserTopicPermissions.params.parse(args)
     const topicPermissions = await rabbitHttpRequest(`/users/${encodeURIComponent(user)}/topic-permissions`)
     return { content: [{ type: "text", text: JSON.stringify(topicPermissions, null, 2) } as MCPTextContent] }
   }
@@ -153,7 +153,7 @@ const listUsersWithoutPermissions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const users = await rabbitHttpRequest("/users/without-permissions")
     return { content: [{ type: "text", text: JSON.stringify(users, null, 2) } as MCPTextContent] }
   }
@@ -173,8 +173,8 @@ const bulkDeleteUsers = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { users: string[] }, _extra: any): Promise<MCPToolResult> => {
-    const { users } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { users } = bulkDeleteUsers.params.parse(args)
     const result = await rabbitHttpRequest(
       `/users/bulk-delete`,
       "POST",
@@ -199,7 +199,7 @@ const listUserLimits = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const limits = await rabbitHttpRequest("/user-limits")
     return { content: [{ type: "text", text: JSON.stringify(limits, null, 2) } as MCPTextContent] }
   }
@@ -219,8 +219,8 @@ const getUserLimit = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { user: string }, _extra: any): Promise<MCPToolResult> => {
-    const { user } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { user } = getUserLimit.params.parse(args)
     const limit = await rabbitHttpRequest(`/user-limits/${encodeURIComponent(user)}`)
     return { content: [{ type: "text", text: JSON.stringify(limit, null, 2) } as MCPTextContent] }
   }
@@ -244,8 +244,8 @@ const setUserLimit = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { user: string; name: string; value: number }, _extra: any): Promise<MCPToolResult> => {
-    const { user, name, value } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { user, name, value } = setUserLimit.params.parse(args)
     const result = await rabbitHttpRequest(
       `/user-limits/${encodeURIComponent(user)}/${encodeURIComponent(name)}`,
       "PUT",
@@ -273,8 +273,8 @@ const deleteUserLimit = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { user: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { user, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { user, name } = deleteUserLimit.params.parse(args)
     const result = await rabbitHttpRequest(
       `/user-limits/${encodeURIComponent(user)}/${encodeURIComponent(name)}`,
       "DELETE"

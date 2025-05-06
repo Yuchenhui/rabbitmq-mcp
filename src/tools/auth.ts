@@ -16,7 +16,7 @@ const listFederationLinks = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const links = await rabbitHttpRequest("/federation-links")
     return { content: [{ type: "text", text: JSON.stringify(links, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listFederationLinksVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listFederationLinksVhost.params.parse(args)
     const links = await rabbitHttpRequest(`/federation-links/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(links, null, 2) } as MCPTextContent] }
   }
@@ -57,8 +57,8 @@ const listAuthAttemptsNode = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { node: string }, _extra: any): Promise<MCPToolResult> => {
-    const { node } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { node } = listAuthAttemptsNode.params.parse(args)
     const attempts = await rabbitHttpRequest(`/auth/attempts/${encodeURIComponent(node)}`)
     return { content: [{ type: "text", text: JSON.stringify(attempts, null, 2) } as MCPTextContent] }
   }
@@ -78,8 +78,8 @@ const listAuthAttemptsNodeSource = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { node: string }, _extra: any): Promise<MCPToolResult> => {
-    const { node } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { node } = listAuthAttemptsNodeSource.params.parse(args)
     const attempts = await rabbitHttpRequest(`/auth/attempts/${encodeURIComponent(node)}/source`)
     return { content: [{ type: "text", text: JSON.stringify(attempts, null, 2) } as MCPTextContent] }
   }
@@ -99,8 +99,8 @@ const hashPassword = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { password: string }, _extra: any): Promise<MCPToolResult> => {
-    const { password } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { password } = hashPassword.params.parse(args)
     const hash = await rabbitHttpRequest(`/auth/hash_password/${encodeURIComponent(password)}`)
     return { content: [{ type: "text", text: JSON.stringify(hash, null, 2) } as MCPTextContent] }
   }
@@ -120,7 +120,7 @@ const getAuthInfo = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const info = await rabbitHttpRequest("/auth")
     return { content: [{ type: "text", text: JSON.stringify(info, null, 2) } as MCPTextContent] }
   }

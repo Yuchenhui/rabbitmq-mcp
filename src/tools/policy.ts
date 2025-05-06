@@ -16,7 +16,7 @@ const listPolicies = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const policies = await rabbitHttpRequest("/policies")
     return { content: [{ type: "text", text: JSON.stringify(policies, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listPoliciesVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listPoliciesVhost.params.parse(args)
     const policies = await rabbitHttpRequest(`/policies/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(policies, null, 2) } as MCPTextContent] }
   }
@@ -57,8 +57,8 @@ const getPolicy = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getPolicy.params.parse(args)
     const policy = await rabbitHttpRequest(`/policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(policy, null, 2) } as MCPTextContent] }
   }
@@ -92,8 +92,8 @@ const putPolicy = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string; pattern: string; definition: any; priority?: number; apply_to?: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name, ...body } = putPolicy.params.parse(args)
     const result = await rabbitHttpRequest(
       `/policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "PUT",
@@ -118,8 +118,8 @@ const deletePolicy = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = deletePolicy.params.parse(args)
     const result = await rabbitHttpRequest(
       `/policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "DELETE"
@@ -142,7 +142,7 @@ const listOperatorPolicies = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const policies = await rabbitHttpRequest("/operator-policies")
     return { content: [{ type: "text", text: JSON.stringify(policies, null, 2) } as MCPTextContent] }
   }
@@ -162,8 +162,8 @@ const listOperatorPoliciesVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listOperatorPoliciesVhost.params.parse(args)
     const policies = await rabbitHttpRequest(`/operator-policies/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(policies, null, 2) } as MCPTextContent] }
   }
@@ -183,8 +183,8 @@ const getOperatorPolicy = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getOperatorPolicy.params.parse(args)
     const policy = await rabbitHttpRequest(`/operator-policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(policy, null, 2) } as MCPTextContent] }
   }
@@ -218,8 +218,8 @@ const putOperatorPolicy = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string; pattern: string; definition: any; priority?: number; apply_to?: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name, ...body } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name, ...body } = putOperatorPolicy.params.parse(args)
     const result = await rabbitHttpRequest(
       `/operator-policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "PUT",
@@ -244,8 +244,8 @@ const deleteOperatorPolicy = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = deleteOperatorPolicy.params.parse(args)
     const result = await rabbitHttpRequest(
       `/operator-policies/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "DELETE"

@@ -16,7 +16,7 @@ const listParameters = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const parameters = await rabbitHttpRequest("/parameters")
     return { content: [{ type: "text", text: JSON.stringify(parameters, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listParametersComponent = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { component: string }, _extra: any): Promise<MCPToolResult> => {
-    const { component } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { component } = listParametersComponent.params.parse(args)
     const parameters = await rabbitHttpRequest(`/parameters/${encodeURIComponent(component)}`)
     return { content: [{ type: "text", text: JSON.stringify(parameters, null, 2) } as MCPTextContent] }
   }
@@ -57,8 +57,8 @@ const listParametersComponentVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { component: string; vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { component, vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { component, vhost } = listParametersComponentVhost.params.parse(args)
     const parameters = await rabbitHttpRequest(`/parameters/${encodeURIComponent(component)}/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(parameters, null, 2) } as MCPTextContent] }
   }
@@ -82,8 +82,8 @@ const getParameter = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { component: string; vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { component, vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { component, vhost, name } = getParameter.params.parse(args)
     const parameter = await rabbitHttpRequest(`/parameters/${encodeURIComponent(component)}/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(parameter, null, 2) } as MCPTextContent] }
   }
@@ -113,8 +113,8 @@ const putParameter = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { component: string; vhost: string; name: string; value: any }, _extra: any): Promise<MCPToolResult> => {
-    const { component, vhost, name, value } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { component, vhost, name, value } = putParameter.params.parse(args)
     const result = await rabbitHttpRequest(
       `/parameters/${encodeURIComponent(component)}/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "PUT",
@@ -143,8 +143,8 @@ const deleteParameter = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { component: string; vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { component, vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { component, vhost, name } = deleteParameter.params.parse(args)
     const result = await rabbitHttpRequest(
       `/parameters/${encodeURIComponent(component)}/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`,
       "DELETE"
@@ -167,7 +167,7 @@ const listGlobalParameters = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const parameters = await rabbitHttpRequest("/global-parameters")
     return { content: [{ type: "text", text: JSON.stringify(parameters, null, 2) } as MCPTextContent] }
   }
@@ -187,8 +187,8 @@ const getGlobalParameter = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = getGlobalParameter.params.parse(args)
     const parameter = await rabbitHttpRequest(`/global-parameters/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(parameter, null, 2) } as MCPTextContent] }
   }
@@ -208,8 +208,8 @@ const putGlobalParameter = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { name: string; value: any }, _extra: any): Promise<MCPToolResult> => {
-    const { name, value } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name, value } = putGlobalParameter.params.parse(args)
     const result = await rabbitHttpRequest(
       `/global-parameters/${encodeURIComponent(name)}`,
       "PUT",
@@ -234,8 +234,8 @@ const deleteGlobalParameter = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = deleteGlobalParameter.params.parse(args)
     const result = await rabbitHttpRequest(
       `/global-parameters/${encodeURIComponent(name)}`,
       "DELETE"

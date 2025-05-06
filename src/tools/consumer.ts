@@ -16,7 +16,7 @@ const listConsumers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const consumers = await rabbitHttpRequest("/consumers")
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listConsumersVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listConsumersVhost.params.parse(args)
     const consumers = await rabbitHttpRequest(`/consumers/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }
@@ -60,8 +60,8 @@ const listConsumersQueue = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; queue: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, queue } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, queue } = listConsumersQueue.params.parse(args)
     const consumers = await rabbitHttpRequest(`/queues/${encodeURIComponent(vhost)}/${encodeURIComponent(queue)}/consumers`)
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }

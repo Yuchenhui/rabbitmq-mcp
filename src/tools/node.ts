@@ -5,7 +5,7 @@ import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 const listNodes = {
   name: "list-nodes",
   description: "List all nodes in the RabbitMQ cluster with their metrics",
-  params: {},
+  params: z.object({}),
   inputSchema: {
     type: "object",
     properties: {},
@@ -16,7 +16,7 @@ const listNodes = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const nodes = await rabbitHttpRequest("/nodes")
     return { content: [{ type: "text", text: JSON.stringify(nodes, null, 2) } as MCPTextContent] }
   }
@@ -25,7 +25,7 @@ const listNodes = {
 const getNode = {
   name: "get-node",
   description: "Get metrics of an individual cluster node",
-  params: { name: z.string() },
+  params: z.object({ name: z.string() }),
   inputSchema: {
     type: "object",
     properties: { name: { type: "string" } },
@@ -36,8 +36,8 @@ const getNode = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = getNode.params.parse(args)
     const node = await rabbitHttpRequest(`/nodes/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(node, null, 2) } as MCPTextContent] }
   }
@@ -46,7 +46,7 @@ const getNode = {
 const getNodeMemory = {
   name: "get-node-memory",
   description: "Get memory usage breakdown of a specific cluster node",
-  params: { name: z.string() },
+  params: z.object({ name: z.string() }),
   inputSchema: {
     type: "object",
     properties: { name: { type: "string" } },
@@ -57,8 +57,8 @@ const getNodeMemory = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = getNodeMemory.params.parse(args)
     const memory = await rabbitHttpRequest(`/nodes/${encodeURIComponent(name)}/memory`)
     return { content: [{ type: "text", text: JSON.stringify(memory, null, 2) } as MCPTextContent] }
   }

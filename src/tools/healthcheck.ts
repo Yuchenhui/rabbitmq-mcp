@@ -16,7 +16,7 @@ const getHealthAlarms = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/health/checks/alarms")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -36,7 +36,7 @@ const getHealthLocalAlarms = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/health/checks/local-alarms")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -56,8 +56,8 @@ const getHealthCertificateExpiration = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { within: string; unit: string }, _extra: any): Promise<MCPToolResult> => {
-    const { within, unit } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { within, unit } = getHealthCertificateExpiration.params.parse(args)
     const result = await rabbitHttpRequest(`/health/checks/certificate-expiration/${encodeURIComponent(within)}/${encodeURIComponent(unit)}`)
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -77,8 +77,8 @@ const getHealthPortListener = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { port: string }, _extra: any): Promise<MCPToolResult> => {
-    const { port } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { port } = getHealthPortListener.params.parse(args)
     const result = await rabbitHttpRequest(`/health/checks/port-listener/${encodeURIComponent(port)}`)
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -98,8 +98,8 @@ const getHealthProtocolListener = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { protocol: string }, _extra: any): Promise<MCPToolResult> => {
-    const { protocol } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { protocol } = getHealthProtocolListener.params.parse(args)
     const result = await rabbitHttpRequest(`/health/checks/protocol-listener/${encodeURIComponent(protocol)}`)
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -119,7 +119,7 @@ const getHealthVirtualHosts = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/health/checks/virtual-hosts")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -139,7 +139,7 @@ const getHealthNodeIsQuorumCritical = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/health/checks/node-is-quorum-critical")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -159,7 +159,7 @@ const getRebalanceQueues = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/rebalance/queues")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -179,7 +179,7 @@ const getWhoami = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/whoami")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -199,7 +199,7 @@ const getAuth = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/auth")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -219,7 +219,7 @@ const getExtensions = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const result = await rabbitHttpRequest("/extensions")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }

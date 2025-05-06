@@ -16,7 +16,7 @@ const listStreamConnections = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const connections = await rabbitHttpRequest("/stream/connections")
     return { content: [{ type: "text", text: JSON.stringify(connections, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const listStreamConnectionsVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listStreamConnectionsVhost.params.parse(args)
     const connections = await rabbitHttpRequest(`/stream/connections/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(connections, null, 2) } as MCPTextContent] }
   }
@@ -57,8 +57,8 @@ const getStreamConnection = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getStreamConnection.params.parse(args)
     const connection = await rabbitHttpRequest(`/stream/connections/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(connection, null, 2) } as MCPTextContent] }
   }
@@ -78,8 +78,8 @@ const getStreamConnectionPublishers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getStreamConnectionPublishers.params.parse(args)
     const publishers = await rabbitHttpRequest(`/stream/connections/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/publishers`)
     return { content: [{ type: "text", text: JSON.stringify(publishers, null, 2) } as MCPTextContent] }
   }
@@ -99,8 +99,8 @@ const getStreamConnectionConsumers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = getStreamConnectionConsumers.params.parse(args)
     const consumers = await rabbitHttpRequest(`/stream/connections/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}/consumers`)
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }
@@ -120,8 +120,8 @@ const deleteStreamConnection = {
     readOnlyHint: false,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, name } = deleteStreamConnection.params.parse(args)
     const result = await rabbitHttpRequest(`/stream/connections/${encodeURIComponent(vhost)}/${encodeURIComponent(name)}`, "DELETE")
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) } as MCPTextContent] }
   }
@@ -141,7 +141,7 @@ const listStreamPublishers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const publishers = await rabbitHttpRequest("/stream/publishers")
     return { content: [{ type: "text", text: JSON.stringify(publishers, null, 2) } as MCPTextContent] }
   }
@@ -161,8 +161,8 @@ const listStreamPublishersVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listStreamPublishersVhost.params.parse(args)
     const publishers = await rabbitHttpRequest(`/stream/publishers/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(publishers, null, 2) } as MCPTextContent] }
   }
@@ -182,8 +182,8 @@ const listStreamPublishersVhostStream = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string; stream: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost, stream } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost, stream } = listStreamPublishersVhostStream.params.parse(args)
     const publishers = await rabbitHttpRequest(`/stream/publishers/${encodeURIComponent(vhost)}/${encodeURIComponent(stream)}`)
     return { content: [{ type: "text", text: JSON.stringify(publishers, null, 2) } as MCPTextContent] }
   }
@@ -203,7 +203,7 @@ const listStreamConsumers = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const consumers = await rabbitHttpRequest("/stream/consumers")
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }
@@ -223,8 +223,8 @@ const listStreamConsumersVhost = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { vhost: string }, _extra: any): Promise<MCPToolResult> => {
-    const { vhost } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { vhost } = listStreamConsumersVhost.params.parse(args)
     const consumers = await rabbitHttpRequest(`/stream/consumers/${encodeURIComponent(vhost)}`)
     return { content: [{ type: "text", text: JSON.stringify(consumers, null, 2) } as MCPTextContent] }
   }

@@ -16,7 +16,7 @@ const listChannels = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (_args: {}, _extra: any): Promise<MCPToolResult> => {
+  handler: async (_args: {}): Promise<MCPToolResult> => {
     const channels = await rabbitHttpRequest("/channels")
     return { content: [{ type: "text", text: JSON.stringify(channels, null, 2) } as MCPTextContent] }
   }
@@ -36,8 +36,8 @@ const getChannel = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = getChannel.params.parse(args)
     const channel = await rabbitHttpRequest(`/channels/${encodeURIComponent(name)}`)
     return { content: [{ type: "text", text: JSON.stringify(channel, null, 2) } as MCPTextContent] }
   }
@@ -57,8 +57,8 @@ const listChannelsConnection = {
     readOnlyHint: true,
     openWorldHint: true
   },
-  handler: async (args: { name: string }, _extra: any): Promise<MCPToolResult> => {
-    const { name } = args
+  handler: async (args: any): Promise<MCPToolResult> => {
+    const { name } = listChannelsConnection.params.parse(args)
     const channels = await rabbitHttpRequest(`/connections/${encodeURIComponent(name)}/channels`)
     return { content: [{ type: "text", text: JSON.stringify(channels, null, 2) } as MCPTextContent] }
   }

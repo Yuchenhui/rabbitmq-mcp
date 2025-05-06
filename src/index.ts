@@ -11,7 +11,8 @@ function registerTools(server: McpServer) {
     server.tool(
       tool.name,
       tool.description,
-      tool.params instanceof z.ZodObject ? tool.params.shape : {},
+      tool.params && tool.params instanceof z.ZodObject ? tool.params.shape : {},
+      tool.annotations,
       tool.handler
     )
   }
