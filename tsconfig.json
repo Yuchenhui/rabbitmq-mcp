@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "NodeNext",
     "isolatedModules": true,
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "src/**/*.ts"
