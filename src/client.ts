@@ -33,12 +33,20 @@ function loadFileOrEnv(envVar: string | undefined, pathVar: string | undefined):
   return envVar
 }
 
+function requireEnv(name: string): string {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+  return value
+}
+
 const config: RabbitMQApiConfig = {
   protocol: process.env.RABBITMQ_PROTOCOL || "https",
-  hostname: process.env.RABBITMQ_HOST,
+  hostname: requireEnv("RABBITMQ_HOST"),
   port: Number(process.env.RABBITMQ_MANAGEMENT_PORT),
-  username: process.env.RABBITMQ_USERNAME,
-  password: process.env.RABBITMQ_PASSWORD,
+  username: requireEnv("RABBITMQ_USERNAME"),
+  password: requireEnv("RABBITMQ_PASSWORD"),
   basePath: process.env.RABBITMQ_BASE_PATH || "/api",
   ca: loadFileOrEnv(process.env.RABBITMQ_CA, process.env.RABBITMQ_CA_PATH),
   cert: loadFileOrEnv(process.env.RABBITMQ_CERT, process.env.RABBITMQ_CERT_PATH),
