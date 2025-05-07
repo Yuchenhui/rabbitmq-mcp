@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listPermissions = {
+export const listPermissions = {
   name: "list-permissions",
   description: "List all permissions in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listPermissions = {
   }
 }
 
-const getPermission = {
+export const getPermission = {
   name: "get-permission",
   description: "Get permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string() }),
@@ -43,7 +43,7 @@ const getPermission = {
   }
 }
 
-const setPermission = {
+export const setPermission = {
   name: "set-permission",
   description: "Set permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string(), configure: z.string(), write: z.string(), read: z.string() }),
@@ -75,7 +75,7 @@ const setPermission = {
   }
 }
 
-const deletePermission = {
+export const deletePermission = {
   name: "delete-permission",
   description: "Delete permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string() }),
@@ -99,7 +99,7 @@ const deletePermission = {
   }
 }
 
-const listTopicPermissions = {
+export const listTopicPermissions = {
   name: "list-topic-permissions",
   description: "List all topic permissions in the RabbitMQ cluster.",
   params: z.object({}),
@@ -119,7 +119,7 @@ const listTopicPermissions = {
   }
 }
 
-const getTopicPermission = {
+export const getTopicPermission = {
   name: "get-topic-permission",
   description: "Get topic permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string() }),
@@ -140,7 +140,7 @@ const getTopicPermission = {
   }
 }
 
-const setTopicPermission = {
+export const setTopicPermission = {
   name: "set-topic-permission",
   description: "Set topic permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string(), exchange: z.string(), write: z.string(), read: z.string() }),
@@ -172,7 +172,7 @@ const setTopicPermission = {
   }
 }
 
-const deleteTopicPermission = {
+export const deleteTopicPermission = {
   name: "delete-topic-permission",
   description: "Delete topic permissions for a user in a vhost.",
   params: z.object({ vhost: z.string(), user: z.string() }),

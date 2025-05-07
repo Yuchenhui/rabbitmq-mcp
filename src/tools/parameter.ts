@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listParameters = {
+export const listParameters = {
   name: "list-parameters",
   description: "List all parameters in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listParameters = {
   }
 }
 
-const listParametersComponent = {
+export const listParametersComponent = {
   name: "list-parameters-component",
   description: "List all parameters for a given component.",
   params: z.object({ component: z.string() }),
@@ -43,7 +43,7 @@ const listParametersComponent = {
   }
 }
 
-const listParametersComponentVhost = {
+export const listParametersComponentVhost = {
   name: "list-parameters-component-vhost",
   description: "List all parameters for a given component in a vhost.",
   params: z.object({ component: z.string(), vhost: z.string() }),
@@ -64,7 +64,7 @@ const listParametersComponentVhost = {
   }
 }
 
-const getParameter = {
+export const getParameter = {
   name: "get-parameter",
   description: "Get a specific parameter for a component in a vhost.",
   params: z.object({ component: z.string(), vhost: z.string(), name: z.string() }),
@@ -89,7 +89,7 @@ const getParameter = {
   }
 }
 
-const putParameter = {
+export const putParameter = {
   name: "put-parameter",
   description: "Create or update a parameter for a component in a vhost.",
   params: z.object({
@@ -125,7 +125,7 @@ const putParameter = {
   }
 }
 
-const deleteParameter = {
+export const deleteParameter = {
   name: "delete-parameter",
   description: "Delete a parameter for a component in a vhost.",
   params: z.object({ component: z.string(), vhost: z.string(), name: z.string() }),
@@ -153,7 +153,7 @@ const deleteParameter = {
   }
 }
 
-const listGlobalParameters = {
+export const listGlobalParameters = {
   name: "list-global-parameters",
   description: "List all global parameters in the RabbitMQ cluster.",
   params: z.object({}),
@@ -173,7 +173,7 @@ const listGlobalParameters = {
   }
 }
 
-const getGlobalParameter = {
+export const getGlobalParameter = {
   name: "get-global-parameter",
   description: "Get a specific global parameter.",
   params: z.object({ name: z.string() }),
@@ -194,7 +194,7 @@ const getGlobalParameter = {
   }
 }
 
-const putGlobalParameter = {
+export const putGlobalParameter = {
   name: "put-global-parameter",
   description: "Create or update a global parameter.",
   params: z.object({ name: z.string(), value: z.any() }),
@@ -220,7 +220,7 @@ const putGlobalParameter = {
   }
 }
 
-const deleteGlobalParameter = {
+export const deleteGlobalParameter = {
   name: "delete-global-parameter",
   description: "Delete a global parameter.",
   params: z.object({ name: z.string() }),

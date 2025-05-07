@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listBindings = {
+export const listBindings = {
   name: "list-bindings",
   description: "List all bindings in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listBindings = {
   }
 }
 
-const listBindingsVhost = {
+export const listBindingsVhost = {
   name: "list-bindings-vhost",
   description: "List all bindings for a specific vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listBindingsVhost = {
   }
 }
 
-const listBindingsExchangeQueue = {
+export const listBindingsExchangeQueue = {
   name: "list-bindings-exchange-queue",
   description: "List bindings between an exchange and a queue.",
   params: z.object({ vhost: z.string(), exchange: z.string(), queue: z.string() }),
@@ -68,7 +68,7 @@ const listBindingsExchangeQueue = {
   }
 }
 
-const createBindingExchangeQueue = {
+export const createBindingExchangeQueue = {
   name: "create-binding-exchange-queue",
   description: "Create a binding from an exchange to a queue.",
   params: z.object({
@@ -106,7 +106,7 @@ const createBindingExchangeQueue = {
   }
 }
 
-const deleteBindingExchangeQueue = {
+export const deleteBindingExchangeQueue = {
   name: "delete-binding-exchange-queue",
   description: "Delete a binding from an exchange to a queue.",
   params: z.object({ vhost: z.string(), exchange: z.string(), queue: z.string(), props: z.string() }),
@@ -135,7 +135,7 @@ const deleteBindingExchangeQueue = {
   }
 }
 
-const listBindingsExchangeExchange = {
+export const listBindingsExchangeExchange = {
   name: "list-bindings-exchange-exchange",
   description: "List bindings between two exchanges.",
   params: z.object({ vhost: z.string(), source: z.string(), destination: z.string() }),
@@ -160,7 +160,7 @@ const listBindingsExchangeExchange = {
   }
 }
 
-const createBindingExchangeExchange = {
+export const createBindingExchangeExchange = {
   name: "create-binding-exchange-exchange",
   description: "Create a binding from one exchange to another.",
   params: z.object({
@@ -198,7 +198,7 @@ const createBindingExchangeExchange = {
   }
 }
 
-const deleteBindingExchangeExchange = {
+export const deleteBindingExchangeExchange = {
   name: "delete-binding-exchange-exchange",
   description: "Delete a binding from one exchange to another.",
   params: z.object({ vhost: z.string(), source: z.string(), destination: z.string(), props: z.string() }),

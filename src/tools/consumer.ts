@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listConsumers = {
+export const listConsumers = {
   name: "list-consumers",
   description: "List all consumers in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listConsumers = {
   }
 }
 
-const listConsumersVhost = {
+export const listConsumersVhost = {
   name: "list-consumers-vhost",
   description: "List all consumers for a specific vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listConsumersVhost = {
   }
 }
 
-const listConsumersQueue = {
+export const listConsumersQueue = {
   name: "list-consumers-queue",
   description: "List all consumers for a specific queue.",
   params: z.object({ vhost: z.string(), queue: z.string() }),

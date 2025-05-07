@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "jest": "^29.0.0",
     "shx": "^0.4.0",
     "typescript": "^5.8.3"
   },
@@ -24,7 +25,8 @@
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
     "prepare": "npm run build",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
@@ -41,5 +43,10 @@
     "mcp",
     "modelcontextprotocol",
     "rabbitmq-mcp"
-  ]
+  ],
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": ["./jest.setup.mjs"],
+    "testMatch": ["**/src/tests/**/*.test.mjs"]
+  }
 }

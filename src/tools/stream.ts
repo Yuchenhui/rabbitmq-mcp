@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listStreamConnections = {
+export const listStreamConnections = {
   name: "list-stream-connections",
   description: "List all stream connections in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listStreamConnections = {
   }
 }
 
-const listStreamConnectionsVhost = {
+export const listStreamConnectionsVhost = {
   name: "list-stream-connections-vhost",
   description: "List all stream connections for a given vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listStreamConnectionsVhost = {
   }
 }
 
-const getStreamConnection = {
+export const getStreamConnection = {
   name: "get-stream-connection",
   description: "Get details for a specific stream connection in a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -64,7 +64,7 @@ const getStreamConnection = {
   }
 }
 
-const getStreamConnectionPublishers = {
+export const getStreamConnectionPublishers = {
   name: "get-stream-connection-publishers",
   description: "Get all publishers for a specific stream connection in a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -85,7 +85,7 @@ const getStreamConnectionPublishers = {
   }
 }
 
-const getStreamConnectionConsumers = {
+export const getStreamConnectionConsumers = {
   name: "get-stream-connection-consumers",
   description: "Get all consumers for a specific stream connection in a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -106,7 +106,7 @@ const getStreamConnectionConsumers = {
   }
 }
 
-const deleteStreamConnection = {
+export const deleteStreamConnection = {
   name: "delete-stream-connection",
   description: "Delete a specific stream connection in a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -127,7 +127,7 @@ const deleteStreamConnection = {
   }
 }
 
-const listStreamPublishers = {
+export const listStreamPublishers = {
   name: "list-stream-publishers",
   description: "List all stream publishers in the RabbitMQ cluster.",
   params: z.object({}),
@@ -147,7 +147,7 @@ const listStreamPublishers = {
   }
 }
 
-const listStreamPublishersVhost = {
+export const listStreamPublishersVhost = {
   name: "list-stream-publishers-vhost",
   description: "List all stream publishers for a given vhost.",
   params: z.object({ vhost: z.string() }),
@@ -168,7 +168,7 @@ const listStreamPublishersVhost = {
   }
 }
 
-const listStreamPublishersVhostStream = {
+export const listStreamPublishersVhostStream = {
   name: "list-stream-publishers-vhost-stream",
   description: "List all stream publishers for a stream in a vhost.",
   params: z.object({ vhost: z.string(), stream: z.string() }),
@@ -189,7 +189,7 @@ const listStreamPublishersVhostStream = {
   }
 }
 
-const listStreamConsumers = {
+export const listStreamConsumers = {
   name: "list-stream-consumers",
   description: "List all stream consumers in the RabbitMQ cluster.",
   params: z.object({}),
@@ -209,7 +209,7 @@ const listStreamConsumers = {
   }
 }
 
-const listStreamConsumersVhost = {
+export const listStreamConsumersVhost = {
   name: "list-stream-consumers-vhost",
   description: "List all stream consumers for a given vhost.",
   params: z.object({ vhost: z.string() }),

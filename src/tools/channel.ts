@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listChannels = {
+export const listChannels = {
   name: "list-channels",
   description: "List all channels in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listChannels = {
   }
 }
 
-const getChannel = {
+export const getChannel = {
   name: "get-channel",
   description: "Get details for a specific channel.",
   params: z.object({ name: z.string() }),
@@ -43,7 +43,7 @@ const getChannel = {
   }
 }
 
-const listChannelsConnection = {
+export const listChannelsConnection = {
   name: "list-channels-connection",
   description: "List all channels for a given connection.",
   params: z.object({ name: z.string() }),

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const getHealthAlarms = {
+export const getHealthAlarms = {
   name: "get-health-alarms",
   description: "Get health check status for alarms.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const getHealthAlarms = {
   }
 }
 
-const getHealthLocalAlarms = {
+export const getHealthLocalAlarms = {
   name: "get-health-local-alarms",
   description: "Get health check status for local alarms.",
   params: z.object({}),
@@ -42,7 +42,7 @@ const getHealthLocalAlarms = {
   }
 }
 
-const getHealthCertificateExpiration = {
+export const getHealthCertificateExpiration = {
   name: "get-health-certificate-expiration",
   description: "Get health check status for certificate expiration within a given time.",
   params: z.object({ within: z.string(), unit: z.string() }),
@@ -63,7 +63,7 @@ const getHealthCertificateExpiration = {
   }
 }
 
-const getHealthPortListener = {
+export const getHealthPortListener = {
   name: "get-health-port-listener",
   description: "Get health check status for a port listener.",
   params: z.object({ port: z.string() }),
@@ -84,7 +84,7 @@ const getHealthPortListener = {
   }
 }
 
-const getHealthProtocolListener = {
+export const getHealthProtocolListener = {
   name: "get-health-protocol-listener",
   description: "Get health check status for a protocol listener.",
   params: z.object({ protocol: z.string() }),
@@ -105,7 +105,7 @@ const getHealthProtocolListener = {
   }
 }
 
-const getHealthVirtualHosts = {
+export const getHealthVirtualHosts = {
   name: "get-health-virtual-hosts",
   description: "Get health check status for all virtual hosts.",
   params: z.object({}),
@@ -125,7 +125,7 @@ const getHealthVirtualHosts = {
   }
 }
 
-const getHealthNodeIsQuorumCritical = {
+export const getHealthNodeIsQuorumCritical = {
   name: "get-health-node-is-quorum-critical",
   description: "Get health check status for node quorum criticality.",
   params: z.object({}),
@@ -145,7 +145,7 @@ const getHealthNodeIsQuorumCritical = {
   }
 }
 
-const getRebalanceQueues = {
+export const getRebalanceQueues = {
   name: "get-rebalance-queues",
   description: "Get rebalance status for queues.",
   params: z.object({}),
@@ -165,7 +165,7 @@ const getRebalanceQueues = {
   }
 }
 
-const getWhoami = {
+export const getWhoami = {
   name: "get-whoami",
   description: "Get information about the current user.",
   params: z.object({}),
@@ -185,7 +185,7 @@ const getWhoami = {
   }
 }
 
-const getAuth = {
+export const getAuth = {
   name: "get-auth",
   description: "Get authentication status for the current user.",
   params: z.object({}),
@@ -205,7 +205,7 @@ const getAuth = {
   }
 }
 
-const getExtensions = {
+export const getExtensions = {
   name: "get-extensions",
   description: "Get information about enabled RabbitMQ extensions.",
   params: z.object({}),

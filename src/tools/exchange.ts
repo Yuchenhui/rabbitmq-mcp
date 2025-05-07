@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listExchanges = {
+export const listExchanges = {
   name: "list-exchanges",
   description: "List all exchanges in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listExchanges = {
   }
 }
 
-const listExchangesVhost = {
+export const listExchangesVhost = {
   name: "list-exchanges-vhost",
   description: "List all exchanges for a specific vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listExchangesVhost = {
   }
 }
 
-const getExchange = {
+export const getExchange = {
   name: "get-exchange",
   description: "Get details for a specific exchange.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -67,7 +67,7 @@ const getExchange = {
   }
 }
 
-const putExchange = {
+export const putExchange = {
   name: "put-exchange",
   description: "Create or update an exchange.",
   params: z.object({
@@ -109,7 +109,7 @@ const putExchange = {
   }
 }
 
-const deleteExchange = {
+export const deleteExchange = {
   name: "delete-exchange",
   description: "Delete an exchange.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -136,7 +136,7 @@ const deleteExchange = {
   }
 }
 
-const getExchangeBindingsSource = {
+export const getExchangeBindingsSource = {
   name: "get-exchange-bindings-source",
   description: "List bindings from an exchange (source).",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -160,7 +160,7 @@ const getExchangeBindingsSource = {
   }
 }
 
-const getExchangeBindingsDestination = {
+export const getExchangeBindingsDestination = {
   name: "get-exchange-bindings-destination",
   description: "List bindings to an exchange (destination).",
   params: z.object({ vhost: z.string(), name: z.string() }),

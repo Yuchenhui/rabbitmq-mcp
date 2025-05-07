@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listPolicies = {
+export const listPolicies = {
   name: "list-policies",
   description: "List all policies in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listPolicies = {
   }
 }
 
-const listPoliciesVhost = {
+export const listPoliciesVhost = {
   name: "list-policies-vhost",
   description: "List all policies for a given vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listPoliciesVhost = {
   }
 }
 
-const getPolicy = {
+export const getPolicy = {
   name: "get-policy",
   description: "Get a specific policy for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -64,7 +64,7 @@ const getPolicy = {
   }
 }
 
-const putPolicy = {
+export const putPolicy = {
   name: "put-policy",
   description: "Create or update a policy for a vhost.",
   params: z.object({
@@ -104,7 +104,7 @@ const putPolicy = {
   }
 }
 
-const deletePolicy = {
+export const deletePolicy = {
   name: "delete-policy",
   description: "Delete a policy for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -128,7 +128,7 @@ const deletePolicy = {
   }
 }
 
-const listOperatorPolicies = {
+export const listOperatorPolicies = {
   name: "list-operator-policies",
   description: "List all operator policies in the RabbitMQ cluster.",
   params: z.object({}),
@@ -148,7 +148,7 @@ const listOperatorPolicies = {
   }
 }
 
-const listOperatorPoliciesVhost = {
+export const listOperatorPoliciesVhost = {
   name: "list-operator-policies-vhost",
   description: "List all operator policies for a given vhost.",
   params: z.object({ vhost: z.string() }),
@@ -169,7 +169,7 @@ const listOperatorPoliciesVhost = {
   }
 }
 
-const getOperatorPolicy = {
+export const getOperatorPolicy = {
   name: "get-operator-policy",
   description: "Get a specific operator policy for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -190,7 +190,7 @@ const getOperatorPolicy = {
   }
 }
 
-const putOperatorPolicy = {
+export const putOperatorPolicy = {
   name: "put-operator-policy",
   description: "Create or update an operator policy for a vhost.",
   params: z.object({
@@ -230,7 +230,7 @@ const putOperatorPolicy = {
   }
 }
 
-const deleteOperatorPolicy = {
+export const deleteOperatorPolicy = {
   name: "delete-operator-policy",
   description: "Delete an operator policy for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),

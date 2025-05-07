@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listFederationLinks = {
+export const listFederationLinks = {
   name: "list-federation-links",
   description: "List all federation links in the RabbitMQ cluster.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listFederationLinks = {
   }
 }
 
-const listFederationLinksVhost = {
+export const listFederationLinksVhost = {
   name: "list-federation-links-vhost",
   description: "List all federation links for a given vhost.",
   params: z.object({ vhost: z.string() }),
@@ -43,7 +43,7 @@ const listFederationLinksVhost = {
   }
 }
 
-const listAuthAttemptsNode = {
+export const listAuthAttemptsNode = {
   name: "list-auth-attempts-node",
   description: "List all authentication attempts for a node.",
   params: z.object({ node: z.string() }),
@@ -64,7 +64,7 @@ const listAuthAttemptsNode = {
   }
 }
 
-const listAuthAttemptsNodeSource = {
+export const listAuthAttemptsNodeSource = {
   name: "list-auth-attempts-node-source",
   description: "List all authentication attempts for a node/source.",
   params: z.object({ node: z.string() }),
@@ -85,7 +85,7 @@ const listAuthAttemptsNodeSource = {
   }
 }
 
-const hashPassword = {
+export const hashPassword = {
   name: "hash-password",
   description: "Hash a password using RabbitMQ's internal hashing.",
   params: z.object({ password: z.string() }),
@@ -106,7 +106,7 @@ const hashPassword = {
   }
 }
 
-const getAuthInfo = {
+export const getAuthInfo = {
   name: "get-auth-info",
   description: "Get authentication info for the current user.",
   params: z.object({}),

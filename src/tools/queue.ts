@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listQueues = {
+export const listQueues = {
   name: "list-queues",
   description: "List all queues across all known vhosts",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listQueues = {
   }
 }
 
-const listQueuesVhost = {
+export const listQueuesVhost = {
   name: "list-queues-vhost",
   description: "List queues for a specific vhost",
   params: z.object({ vhost: z.string() }),
@@ -45,7 +45,7 @@ const listQueuesVhost = {
   }
 }
 
-const getQueue = {
+export const getQueue = {
   name: "get-queue",
   description: "Get details for a specific queue",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -69,7 +69,7 @@ const getQueue = {
   }
 }
 
-const putQueue = {
+export const putQueue = {
   name: "put-queue",
   description: "Create or update a queue",
   params: z.object({
@@ -107,7 +107,7 @@ const putQueue = {
   }
 }
 
-const deleteQueue = {
+export const deleteQueue = {
   name: "delete-queue",
   description: "Delete a queue",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -134,7 +134,7 @@ const deleteQueue = {
   }
 }
 
-const purgeQueue = {
+export const purgeQueue = {
   name: "purge-queue",
   description: "Purge a queue",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -161,7 +161,7 @@ const purgeQueue = {
   }
 }
 
-const getQueueMessages = {
+export const getQueueMessages = {
   name: "get-queue-messages",
   description: "Get messages from a queue",
   params: z.object({
@@ -203,7 +203,7 @@ const getQueueMessages = {
   }
 }
 
-const getQueueBindings = {
+export const getQueueBindings = {
   name: "get-queue-bindings",
   description: "List queue bindings",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -229,7 +229,7 @@ const getQueueBindings = {
   }
 }
 
-const getQueueUnacked = {
+export const getQueueUnacked = {
   name: "get-queue-unacked",
   description: "List unacked messages for a queue",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -255,7 +255,7 @@ const getQueueUnacked = {
   }
 }
 
-const pauseQueue = {
+export const pauseQueue = {
   name: "pause-queue",
   description: "Pause a queue",
   params: z.object({ vhost: z.string(), name: z.string() }),
@@ -282,7 +282,7 @@ const pauseQueue = {
   }
 }
 
-const resumeQueue = {
+export const resumeQueue = {
   name: "resume-queue",
   description: "Resume a queue",
   params: z.object({ vhost: z.string(), name: z.string() }),

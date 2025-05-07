@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listNodes = {
+export const listNodes = {
   name: "list-nodes",
   description: "List all nodes in the RabbitMQ cluster with their metrics",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listNodes = {
   }
 }
 
-const getNode = {
+export const getNode = {
   name: "get-node",
   description: "Get metrics of an individual cluster node",
   params: z.object({ name: z.string() }),
@@ -43,7 +43,7 @@ const getNode = {
   }
 }
 
-const getNodeMemory = {
+export const getNodeMemory = {
   name: "get-node-memory",
   description: "Get memory usage breakdown of a specific cluster node",
   params: z.object({ name: z.string() }),

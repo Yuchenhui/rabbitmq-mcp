@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listVhosts = {
+export const listVhosts = {
   name: "list-vhosts",
   description: "List all virtual hosts in the cluster",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listVhosts = {
   }
 }
 
-const getVhost = {
+export const getVhost = {
   name: "get-vhost",
   description: "Get details for a specific virtual host",
   params: z.object({ name: z.string() }),
@@ -43,7 +43,7 @@ const getVhost = {
   }
 }
 
-const putVhost = {
+export const putVhost = {
   name: "put-vhost",
   description: "Create or update a virtual host",
   params: z.object({
@@ -83,7 +83,7 @@ const putVhost = {
   }
 }
 
-const deleteVhost = {
+export const deleteVhost = {
   name: "delete-vhost",
   description: "Delete a virtual host",
   params: z.object({ name: z.string() }),
@@ -107,7 +107,7 @@ const deleteVhost = {
   }
 }
 
-const getVhostPermissions = {
+export const getVhostPermissions = {
   name: "get-vhost-permissions",
   description: "List all permissions for a given virtual host",
   params: z.object({ name: z.string() }),
@@ -128,7 +128,7 @@ const getVhostPermissions = {
   }
 }
 
-const getVhostTopicPermissions = {
+export const getVhostTopicPermissions = {
   name: "get-vhost-topic-permissions",
   description: "List all topic permissions for a given virtual host",
   params: z.object({ name: z.string() }),
@@ -149,7 +149,7 @@ const getVhostTopicPermissions = {
   }
 }
 
-const protectVhost = {
+export const protectVhost = {
   name: "protect-vhost",
   description: "Protect a virtual host from deletion",
   params: z.object({ name: z.string() }),
@@ -173,7 +173,7 @@ const protectVhost = {
   }
 }
 
-const unprotectVhost = {
+export const unprotectVhost = {
   name: "unprotect-vhost",
   description: "Remove deletion protection from a virtual host",
   params: z.object({ name: z.string() }),
@@ -197,7 +197,7 @@ const unprotectVhost = {
   }
 }
 
-const startVhostOnNode = {
+export const startVhostOnNode = {
   name: "start-vhost-on-node",
   description: "Start or restart a virtual host on a node",
   params: z.object({ name: z.string(), node: z.string() }),
@@ -224,7 +224,7 @@ const startVhostOnNode = {
   }
 }
 
-const listVhostLimits = {
+export const listVhostLimits = {
   name: "list-vhost-limits",
   description: "List all vhost limits in the RabbitMQ cluster.",
   params: z.object({}),
@@ -244,7 +244,7 @@ const listVhostLimits = {
   }
 }
 
-const listVhostLimitsVhost = {
+export const listVhostLimitsVhost = {
   name: "list-vhost-limits-vhost",
   description: "List all vhost limits for a specific vhost.",
   params: z.object({ vhost: z.string() }),
@@ -265,7 +265,7 @@ const listVhostLimitsVhost = {
   }
 }
 
-const putVhostLimit = {
+export const putVhostLimit = {
   name: "put-vhost-limit",
   description: "Set a vhost limit for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string(), value: z.any() }),
@@ -295,7 +295,7 @@ const putVhostLimit = {
   }
 }
 
-const deleteVhostLimit = {
+export const deleteVhostLimit = {
   name: "delete-vhost-limit",
   description: "Delete a vhost limit for a vhost.",
   params: z.object({ vhost: z.string(), name: z.string() }),

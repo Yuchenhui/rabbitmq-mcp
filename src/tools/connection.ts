@@ -2,7 +2,7 @@ import { z } from "zod"
 import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
-const listConnections = {
+export const listConnections = {
   name: "list-connections",
   description: "List all open connections.",
   params: z.object({}),
@@ -22,7 +22,7 @@ const listConnections = {
   }
 }
 
-const getConnection = {
+export const getConnection = {
   name: "get-connection",
   description: "Get details for a specific connection.",
   params: z.object({ name: z.string() }),
@@ -43,7 +43,7 @@ const getConnection = {
   }
 }
 
-const deleteConnection = {
+export const deleteConnection = {
   name: "delete-connection",
   description: "Close a specific connection.",
   params: z.object({ name: z.string(), reason: z.string().optional() }),
@@ -70,7 +70,7 @@ const deleteConnection = {
   }
 }
 
-const listConnectionsVhost = {
+export const listConnectionsVhost = {
   name: "list-connections-vhost",
   description: "List all open connections in a specific virtual host.",
   params: z.object({ vhost: z.string() }),
@@ -91,7 +91,7 @@ const listConnectionsVhost = {
   }
 }
 
-const listConnectionsUsername = {
+export const listConnectionsUsername = {
   name: "list-connections-username",
   description: "List all open connections for a specific username.",
   params: z.object({ username: z.string() }),
@@ -112,7 +112,7 @@ const listConnectionsUsername = {
   }
 }
 
-const deleteConnectionsUsername = {
+export const deleteConnectionsUsername = {
   name: "delete-connections-username",
   description: "Close all connections for a specific username. Optionally provide a reason.",
   params: z.object({
@@ -145,7 +145,7 @@ const deleteConnectionsUsername = {
   }
 }
 
-const getConnectionChannels = {
+export const getConnectionChannels = {
   name: "get-connection-channels",
   description: "List all channels for a given connection.",
   params: z.object({ name: z.string() }),
