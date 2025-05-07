@@ -1,9 +1,6 @@
-import { jest } from '@jest/globals'
+import { mockRabbitHttpRequest, setupClientMock } from '../mocks.js'
 
-const mockRabbitHttpRequest = jest.fn()
-await jest.unstable_mockModule('../../../dist/client.js', () => ({
-  rabbitHttpRequest: mockRabbitHttpRequest
-}))
+await setupClientMock()
 
 const {
   listQueues,
