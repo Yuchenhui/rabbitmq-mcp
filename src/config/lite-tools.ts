@@ -8,42 +8,42 @@
 // 开发相关核心工具（12个）
 const DEVELOPMENT_TOOLS = [
   // 队列管理 - 最常用
-  'rabbitmq-list-queues',
-  'rabbitmq-put-queue',
-  'rabbitmq-get-queue-messages',
-  'rabbitmq-delete-queue',
-  'rabbitmq-purge-queue',
+  'list-queues',
+  'put-queue',
+  'get-queue-messages',
+  'delete-queue',
+  'purge-queue',
 
   // 交换机管理
-  'rabbitmq-list-exchanges',
-  'rabbitmq-put-exchange',
-  'rabbitmq-delete-exchange',
+  'list-exchanges',
+  'put-exchange',
+  'delete-exchange',
 
   // 绑定管理
-  'rabbitmq-create-binding-exchange-queue',
-  'rabbitmq-delete-binding-exchange-queue',
+  'create-binding-exchange-queue',
+  'delete-binding-exchange-queue',
 
   // 消费者和连接监控
-  'rabbitmq-list-consumers',
-  'rabbitmq-list-connections'
+  'list-consumers',
+  'list-connections'
 ] as const;
 
 // 基础运维核心工具（7个）
 const BASIC_OPS_TOOLS = [
   // 用户管理 - 基础操作
-  'rabbitmq-list-users',
-  'rabbitmq-put-user',
+  'list-users',
+  'put-user',
 
   // 虚拟主机管理
-  'rabbitmq-list-vhosts',
-  'rabbitmq-put-vhost',
+  'list-vhosts',
+  'put-vhost',
 
   // 权限管理
-  'rabbitmq-list-permissions',
-  'rabbitmq-set-permission',
+  'list-permissions',
+  'set-permission',
 
   // 健康检查
-  'rabbitmq-get-health-alarms'
+  'get-health-alarms'
 ] as const;
 
 // Custom API 工具（始终可用）
