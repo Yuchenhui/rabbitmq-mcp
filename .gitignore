@@ -21,3 +21,6 @@ Thumbs.db
 # Editor swap files
 *.swp
 *.swo
+.env
+.claude/
+.vscode
