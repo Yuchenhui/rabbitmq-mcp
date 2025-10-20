@@ -1,11 +1,11 @@
 /**
  * Lite 模式工具配置
  *
- * 在 lite 模式下，只保留开发过程中最核心的20个工具
+ * 在 lite 模式下，只保留开发过程中最核心的18个工具
  * 分为开发相关和基础运维两大类
  */
 
-// 开发相关核心工具（12个）
+// 开发相关核心工具（11个）
 const DEVELOPMENT_TOOLS = [
   // 队列管理 - 最常用
   'list-queues',
@@ -23,27 +23,25 @@ const DEVELOPMENT_TOOLS = [
   'create-binding-exchange-queue',
   'delete-binding-exchange-queue',
 
-  // 消费者和连接监控
-  'list-consumers',
-  'list-connections'
+  // 消费者监控
+  'list-consumers'
 ] as const;
 
-// 基础运维核心工具（7个）
+// 基础运维核心工具（6个）
 const BASIC_OPS_TOOLS = [
-  // 用户管理 - 基础操作
-  'list-users',
-  'put-user',
-
   // 虚拟主机管理
   'list-vhosts',
   'put-vhost',
 
-  // 权限管理
-  'list-permissions',
-  'set-permission',
+  // 通道管理
+  'list-channels',
+  'get-channel',
 
   // 健康检查
-  'get-health-alarms'
+  'get-health-alarms',
+
+  // 连接管理（从开发相关移过来）
+  'list-connections'
 ] as const;
 
 // Custom API 工具（始终可用）

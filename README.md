@@ -12,11 +12,11 @@ MCP is a [standardized protocol](https://modelcontextprotocol.io/) for managing 
 ## 🚀 New Features
 
 ### Lite Mode
-The server now supports a **Lite mode** that provides a focused set of 20 essential tools optimized for development workflows. This reduces complexity while maintaining full RabbitMQ API coverage through the Custom API tool.
+The server now supports a **Lite mode** that provides a focused set of 18 essential tools optimized for development workflows. This reduces complexity while maintaining full RabbitMQ API coverage through the Custom API tool.
 
 **Usage:**
 ```bash
-# Lite mode (20 core tools for development)
+# Lite mode (18 core tools for development)
 npm start -- --lite
 
 # Full mode (all 124 tools for complete management)
@@ -30,12 +30,13 @@ npm start -- --help
 - **Queue Management** (5 tools): `list-queues`, `put-queue`, `get-queue-messages`, `delete-queue`, `purge-queue`
 - **Exchange Management** (3 tools): `list-exchanges`, `put-exchange`, `delete-exchange`
 - **Binding Management** (2 tools): `create-binding-exchange-queue`, `delete-binding-exchange-queue`
-- **Monitoring** (2 tools): `list-consumers`, `list-connections`
-- **Basic Operations** (7 tools): `list-users`, `put-user`, `list-vhosts`, `put-vhost`, `list-permissions`, `set-permission`, `get-health-alarms`
+- **Monitoring** (1 tool): `list-consumers`
+- **Channel Management** (2 tools): `list-channels`, `get-channel`
+- **Basic Operations** (4 tools): `list-vhosts`, `put-vhost`, `list-connections`, `get-health-alarms`
 - **Custom API** (1 tool): `rabbitmq-custom-api` - Access to any RabbitMQ HTTP API endpoint
 
 ### Custom API Tool
-The `rabbitmq-custom-api` tool provides universal access to the complete RabbitMQ HTTP API, allowing you to call any endpoint with any HTTP method. This ensures full API coverage while keeping the Lite mode focused.
+The `rabbitmq-custom-api` tool provides universal access to the complete RabbitMQ HTTP API, allowing you to call any endpoint with any HTTP method. This ensures full API coverage while keeping the Lite mode focused and efficient.
 
 **Usage Examples:**
 
@@ -96,8 +97,8 @@ The `rabbitmq-custom-api` tool provides universal access to the complete RabbitM
 
 ### Benefits
 
-- **84% Tool Reduction**: Lite mode reduces from 124 tools to 20 focused tools
-- **Developer-Focused**: Essential tools for development workflows
+- **85% Tool Reduction**: Lite mode reduces from 124 tools to 18 focused tools
+- **Developer-Focused**: Essential tools for development workflows without user/permission management
 - **Full API Access**: Custom API provides access to any RabbitMQ HTTP endpoint
 - **Flexible Usage**: Choose between Lite mode for daily development or Full mode for complete management
 - **Easy Migration**: Seamlessly switch between modes as needed
@@ -240,7 +241,7 @@ For detailed manual testing instructions, see:
 - `live-test.js` - Automated live testing with actual RabbitMQ instance
 
 ### Test Coverage
-- ✅ Lite mode functionality (20 core tools)
+- ✅ Lite mode functionality (18 core tools)
 - ✅ Full mode functionality (124 tools)
 - ✅ Custom API tool (complete RabbitMQ HTTP API access)
 - ✅ Command-line interface (--lite, --help, --version)

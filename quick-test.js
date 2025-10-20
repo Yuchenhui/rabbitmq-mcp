@@ -38,10 +38,10 @@ try {
   console.log(`  ✅ Custom API 包含: ${config.LITE_MODE_TOOLS.includes('rabbitmq-custom-api') ? '是' : '否'}`);
 
   // 验证工具数量
-  if (config.LITE_TOOL_COUNT === 20) {
+  if (config.LITE_TOOL_COUNT === 18) {
     console.log('  ✅ 工具数量正确');
   } else {
-    console.log(`  ❌ 工具数量错误: 期望 20，实际 ${config.LITE_TOOL_COUNT}`);
+    console.log(`  ❌ 工具数量错误: 期望 18，实际 ${config.LITE_TOOL_COUNT}`);
   }
 } catch (error) {
   console.log('  ❌ 配置加载失败:', error.message);
