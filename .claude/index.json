@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-10-20T14:52:21.000Z",
+  "project": {
+    "name": "rabbitmq-mcp",
+    "version": "0.2.0",
+    "description": "RabbitMQ MCP Server",
+    "language": "TypeScript",
+    "type": "MCP Server"
+  },
+  "scan": {
+    "total_files": 35,
+    "scanned_files": 20,
+    "coverage_percentage": 57.1,
+    "truncated": false
+  },
+  "modules": [
+    {
+      "path": "src",
+      "type": "core",
+      "description": "核心源码目录",
+      "entry": "src/index.ts",
+      "submodules": [
+        {
+          "path": "src/tools",
+          "type": "feature",
+          "description": "RabbitMQ工具模块集合",
+          "entry": "src/tools/index.ts",
+          "tools": [
+            "auth", "vhost", "queue", "exchange", "connection",
+            "user", "healthcheck", "binding", "channel", "consumer",
+            "node", "parameter", "permission", "policy", "stream"
+          ]
+        },
+        {
+          "path": "src/types",
+          "type": "definition",
+          "description": "MCP类型定义",
+          "entry": "src/types/mcp.ts"
+        },
+        {
+          "path": "src/tests",
+          "type": "test",
+          "description": "测试模块",
+          "entry": "src/tests/mocks.js",
+          "test_files": 15
+        }
+      ]
+    }
+  ],
+  "interfaces": {
+    "mcp_server": {
+      "protocol": "Model Context Protocol",
+      "version": "1.11.0",
+      "transport": "stdio",
+      "capabilities": ["logging", "tools"]
+    },
+    "rabbitmq_api": {
+      "protocol": "HTTP/HTTPS",
+      "base_path": "/api",
+      "authentication": "Basic Auth",
+      "tls_support": true
+    }
+  },
+  "test_coverage": {
+    "framework": "Jest",
+    "test_files": 15,
+    "mock_strategy": "HTTP Request Mocking",
+    "coverage_areas": [
+      "Tool functionality",
+      "Parameter validation",
+      "Error handling",
+      "Data transformation"
+    ]
+  },
+  "quality_tools": {
+    "typescript": {
+      "strict_mode": true,
+      "target": "NodeNext",
+      "module_system": "ESM"
+    },
+    "zod": {
+      "usage": "Parameter validation and type safety",
+      "coverage": "All tool parameters"
+    },
+    "jest": {
+      "version": "29.0.0",
+      "environment": "node",
+      "module_type": "ES Modules (.mjs)"
+    }
+  },
+  "gaps": {
+    "unscanned_files": 15,
+    "unscanned_areas": [
+      "src/tools/[binding,channel,consumer,node,parameter,permission,policy,stream].ts",
+      "Remaining unit test files in src/tests/unit/",
+      "package-lock.json (dependency details)"
+    ],
+    "next_scan_priorities": [
+      "Complete tool module analysis",
+      "Test coverage verification",
+      "Dependency security assessment"
+    ]
+  },
+  "documentation": {
+    "generated_files": [
+      "/home/myu/Source/github/rabbitmq-mcp/CLAUDE.md",
+      "/home/myu/Source/github/rabbitmq-mcp/src/tools/CLAUDE.md",
+      "/home/myu/Source/github/rabbitmq-mcp/src/tools/auth/CLAUDE.md",
+      "/home/myu/Source/github/rabbitmq-mcp/src/tests/CLAUDE.md"
+    ],
+    "mermaid_diagrams": 1,
+    "breadcrumb_navigation": 3,
+    "module_indexes": 4
+  },
+  "architecture_insights": {
+    "patterns": [
+      "Tool-based MCP server design",
+      "Modular RabbitMQ API wrapper",
+      "Type-safe parameter validation",
+      "Mock-based testing strategy"
+    ],
+    "strengths": [
+      "Complete RabbitMQ HTTP API coverage",
+      "Strong TypeScript typing",
+      "Comprehensive test suite",
+      "Standard MCP compliance"
+    ],
+    "considerations": [
+      "Single binary deployment model",
+      "Environment-based configuration",
+      "stdio-only transport (current limitation)"
+    ]
+  }
+}
