@@ -3,80 +3,80 @@ import { rabbitHttpRequest } from "../client.js"
 import { MCPTextContent, MCPToolResult } from "../types/mcp.js"
 
 /**
- * 通用 RabbitMQ HTTP API 调用工具
- * 支持调用任意 RabbitMQ HTTP API 端点
+ * Universal RabbitMQ HTTP API tool
+ * Supports calling any RabbitMQ HTTP API endpoint
  */
 export const customApi = {
   name: "rabbitmq-custom-api",
-  description: "通用的 RabbitMQ HTTP API 调用工具，支持调用任意 RabbitMQ HTTP API 端点",
+  description: "Universal RabbitMQ HTTP API tool for calling any RabbitMQ HTTP API endpoint",
   params: z.object({
-    // API 路径，如 "/queues", "/exchanges", "/vhosts" 等
+    // API path, e.g., "/queues", "/exchanges", "/vhosts" etc.
     path: z.string()
-      .min(1, "API 路径不能为空")
-      .startsWith("/", "API 路径必须以 / 开头")
-      .describe("RabbitMQ HTTP API 路径，例如：/queues, /exchanges/my-vhost/my-exchange"),
+      .min(1, "API path cannot be empty")
+      .startsWith("/", "API path must start with /")
+      .describe("RabbitMQ HTTP API path, e.g., /queues, /exchanges/my-vhost/my-exchange"),
 
-    // HTTP 方法
+    // HTTP method
     method: z.enum(["GET", "POST", "PUT", "DELETE"])
       .default("GET")
-      .describe("HTTP 方法：GET（查询）、POST（创建）、PUT（更新）、DELETE（删除）"),
+      .describe("HTTP method: GET (query), POST (create), PUT (update), DELETE (delete)"),
 
-    // 请求体（可选）
+    // Request body (optional)
     body: z.any()
       .optional()
-      .describe("请求体数据（JSON 对象），用于 POST 和 PUT 请求"),
+      .describe("Request body data (JSON object), used for POST and PUT requests"),
 
-    // 查询参数（可选）
+    // Query parameters (optional)
     query: z.record(z.string(), z.any())
       .optional()
-      .describe("查询参数对象，会自动编码为 URL 查询字符串"),
+      .describe("Query parameters object, automatically URL-encoded"),
 
-    // 内容类型（可选）
+    // Content type (optional)
     contentType: z.string()
       .default("application/json")
-      .describe("请求内容类型，默认为 application/json")
+      .describe("Request content type, defaults to application/json")
   }),
   inputSchema: {
     type: "object",
     properties: {
       path: {
         type: "string",
-        description: "RabbitMQ HTTP API 路径，例如：/queues, /exchanges/my-vhost/my-exchange"
+        description: "RabbitMQ HTTP API path, e.g., /queues, /exchanges/my-vhost/my-exchange"
       },
       method: {
         type: "string",
         enum: ["GET", "POST", "PUT", "DELETE"],
         default: "GET",
-        description: "HTTP 方法：GET（查询）、POST（创建）、PUT（更新）、DELETE（删除）"
+        description: "HTTP method: GET (query), POST (create), PUT (update), DELETE (delete)"
       },
       body: {
-        description: "请求体数据（JSON 对象），用于 POST 和 PUT 请求"
+        description: "Request body data (JSON object), used for POST and PUT requests"
       },
       query: {
         type: "object",
-        description: "查询参数对象，会自动编码为 URL 查询字符串"
+        description: "Query parameters object, automatically URL-encoded"
       },
       contentType: {
         type: "string",
         default: "application/json",
-        description: "请求内容类型，默认为 application/json"
+        description: "Request content type, defaults to application/json"
       }
     },
     required: ["path"]
   },
   annotations: {
     title: "RabbitMQ Custom API",
-    readOnlyHint: false, // 支持写操作
-    openWorldHint: true // 可以调用任意 API
+    readOnlyHint: false, // Supports write operations
+    openWorldHint: true // Can call any API
   },
   handler: async (args: any): Promise<MCPToolResult> => {
     const { path, method, body, query, contentType } = customApi.params.parse(args)
 
     try {
-      // 构建完整的 API 路径
+      // Build complete API path
       let apiPath = path
 
-      // 添加查询参数
+      // Add query parameters
       if (query && Object.keys(query).length > 0) {
         const searchParams = new URLSearchParams()
         for (const [key, value] of Object.entries(query)) {
@@ -90,7 +90,7 @@ export const customApi = {
         }
       }
 
-      // 准备请求选项
+      // Prepare request options
       const requestOptions: {
         method: string
         body?: string
@@ -99,7 +99,7 @@ export const customApi = {
         method: method.toUpperCase()
       }
 
-      // 添加请求体
+      // Add request body
       if (body && (method === "POST" || method === "PUT")) {
         if (contentType === "application/json") {
           requestOptions.body = JSON.stringify(body)
@@ -107,7 +107,7 @@ export const customApi = {
             "Content-Type": "application/json"
           }
         } else {
-          // 对于非 JSON 内容类型，直接使用字符串
+          // For non-JSON content types, use string directly
           requestOptions.body = String(body)
           requestOptions.headers = {
             "Content-Type": contentType
@@ -115,21 +115,22 @@ export const customApi = {
         }
       }
 
-      // 调用 RabbitMQ HTTP API
+      // Call RabbitMQ HTTP API
+      const requestBody = requestOptions.body ? JSON.parse(requestOptions.body) : undefined
       const result = await rabbitHttpRequest(
         apiPath,
         requestOptions.method as any,
         undefined, // queryParams
-        requestOptions.body ? JSON.parse(requestOptions.body) : undefined,
+        requestBody,
         requestOptions.headers
       )
 
-      // 格式化响应
+      // Format response
       let responseText: string
       try {
         responseText = JSON.stringify(result, null, 2)
       } catch {
-        // 如果结果不是 JSON 对象，直接转换为字符串
+        // If result is not a JSON object, convert to string directly
         responseText = String(result)
       }
 
@@ -148,13 +149,13 @@ export const customApi = {
       }
 
     } catch (error) {
-      // 错误处理
+      // Error handling
       let errorMessage: string
       let statusCode: number | undefined
 
       if (error instanceof Error) {
         errorMessage = error.message
-        // 尝试从错误消息中提取 HTTP 状态码
+        // Try to extract HTTP status code from error message
         const statusCodeMatch = error.message.match(/HTTP (\d{3})/)
         if (statusCodeMatch) {
           statusCode = parseInt(statusCodeMatch[1], 10)
@@ -173,7 +174,7 @@ export const customApi = {
               statusCode,
               method: method.toUpperCase(),
               path: path,
-              hint: "请检查 API 路径、参数和权限是否正确"
+              hint: "Please check API path, parameters, and permissions"
             }, null, 2)
           } as MCPTextContent
         ],
